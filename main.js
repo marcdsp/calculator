@@ -5,8 +5,6 @@ let calculationStarted = false;
 let previousResult = NaN;
 let lastOperator = null; //might not need this
 let theKeyPad=document.querySelector('#keyPanel');
-let numbers = [1,2,3,4,5,6,7,8,9,0]
-let operatorCheck = ["+","-","÷","*"]
 
 //listeners
 theKeyPad.addEventListener('click', keyType, false)
@@ -31,10 +29,25 @@ calculate = function (val1, val2, sign) {
 
 // determines what happens when a number is pressed
 function numberPressed(val) {
+    if (val == ".") { 
+        if (currentNumber.length == 0) {
+        val = "0."
         runningCalculation.push(val);
         calculationStarted = true;
         currentNumber.push(val);
         document.getElementById("runningCalculation").innerHTML = runningCalculation.join('')
+    }
+    else {runningCalculation.push(val);
+    calculationStarted = true;
+    currentNumber.push(val);
+    document.getElementById("runningCalculation").innerHTML = runningCalculation.join('')
+}
+    }
+else {runningCalculation.push(val);
+calculationStarted = true;
+currentNumber.push(val);
+document.getElementById("runningCalculation").innerHTML = runningCalculation.join('')
+}
     }
 
 // determines what happens when an operator is pressed
@@ -44,6 +57,8 @@ function operatorPressed(operator) {
 }
 // this block determines what happens when it is the first operator that has been pressed
     else if (previousNumber.length == 0 && lastOperator == null) {
+        document.getElementById("resultDisplay").innerHTML = "";
+        document.getElementById("runningCalculation").innerHTML = runningCalculation.join('')
         runningCalculation.push(operator);
         previousNumber.push(...currentNumber);
         currentNumber.length = 0;
@@ -77,24 +92,41 @@ function operatorPressed(operator) {
 }
 
 //called only when the equal key is pressed
-
+function equalKeyPressed() {
+    if (currentNumber.length == 0) {
+    }
+    else if (previousNumber.length !== 0 && lastOperator !== null) {
+        arg1 = previousNumber.join('');
+        arg2 = currentNumber.join('');
+        answer = calculate(arg1, arg2, lastOperator);
+        runningCalculation = [];
+        runningCalculation.push(answer);
+        document.getElementById("resultDisplay").innerHTML = '= ' + answer;
+        lastOperator = null;
+        previousResult = answer;
+        previousNumber = [];
+        currentNumber.push(answer);
+    }
+}
 
 //determines which function to call based on key type
 function keyType(e) {
     if (e.target !== e.currentTarget) {
         console.log(e.target);
         let clickedItem = e.target.id;
-        if (clickedItem == 1 || clickedItem == 2 || clickedItem == 3 || clickedItem == 4 || clickedItem == 5 || clickedItem == 6 || clickedItem == 7 || clickedItem == 8 || clickedItem == 9 || clickedItem == 0) {
+        if (clickedItem == 1 || clickedItem == 2 || clickedItem == 3 || clickedItem == 4 || clickedItem == 5 || clickedItem == 6 || clickedItem == 7 || clickedItem == 8 || clickedItem == 9 || clickedItem == 0 || clickedItem == '.') {
     numberPressed(clickedItem);
     console.log("number pressed " + clickedItem)
     }
-    else if (clickedItem == "+" || clickedItem == "-" || clickedItem == "*" || clickedItem == "/") {
+    else if (clickedItem == "+" || clickedItem == "-" || clickedItem == "*" || clickedItem == "÷") {
     operatorPressed(clickedItem);
     console.log("operator pressed")
     }
-
     else if (clickedItem == "C") {
         clearAll();
+    }
+    else if (clickedItem == "=") {
+        equalKeyPressed();
     }
     e.stopPropagation();
 }
@@ -106,7 +138,7 @@ function clearAll() {
     runningCalculation.length = 0;
     calculationStarted = false;
     previousResult = NaN;
-    lastOperator = "";
+    lastOperator = null;
     document.getElementById("runningCalculation").innerHTML = runningCalculation.join('');
     document.getElementById("resultDisplay").innerHTML = "";
 
