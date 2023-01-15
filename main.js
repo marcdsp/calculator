@@ -2,7 +2,7 @@ let currentNumber = []; //use document query string???
 let previousNumber = [];
 let runningCalculation = [];
 let calculationStarted = false;
-let previousResult = NaN;
+let previousResult = null;
 let lastOperator = null; //might not need this
 let theKeyPad=document.querySelector('#keyPanel');
 
@@ -23,32 +23,51 @@ let operators = {
 },
 calculate = function (val1, val2, sign) {
     if (sign in operators) {
+        val1 = Number(val1);
+        val2 = Number(val2);
         return operators[sign](val1, val2);
     }
 }
 
 // determines what happens when a number is pressed
-function numberPressed(val) {
+function numberPressed(val) { 
+    if (previousResult == null) {
+
     if (val == ".") { 
         if (currentNumber.length == 0) {
-        val = "0."
+            previousResult = null;
+            val = "0."
         runningCalculation.push(val);
         calculationStarted = true;
         currentNumber.push(val);
         document.getElementById("runningCalculation").innerHTML = runningCalculation.join('')
     }
+    else if (currentNumber.includes(".") || currentNumber.includes("0.")) {
+        previousResult = null;}
     else {runningCalculation.push(val);
-    calculationStarted = true;
+        previousResult = null;
+        calculationStarted = true;
     currentNumber.push(val);
     document.getElementById("runningCalculation").innerHTML = runningCalculation.join('')
 }
     }
 else {runningCalculation.push(val);
-calculationStarted = true;
+    previousResult = null;
+    document.getElementById("resultDisplay").innerHTML = "";
+    calculationStarted = true;
 currentNumber.push(val);
 document.getElementById("runningCalculation").innerHTML = runningCalculation.join('')
 }
     }
+    else {clearAll();
+        runningCalculation.push(val);
+        calculationStarted = true;
+        currentNumber.push(val);
+        document.getElementById("runningCalculation").innerHTML = runningCalculation.join('')
+    }
+
+}
+
 
 // determines what happens when an operator is pressed
 function operatorPressed(operator) {
@@ -57,9 +76,11 @@ function operatorPressed(operator) {
 }
 // this block determines what happens when it is the first operator that has been pressed
     else if (previousNumber.length == 0 && lastOperator == null) {
+        previousResult = null;
         document.getElementById("resultDisplay").innerHTML = "";
         document.getElementById("runningCalculation").innerHTML = runningCalculation.join('')
         runningCalculation.push(operator);
+        previousNumber = [];
         previousNumber.push(...currentNumber);
         currentNumber.length = 0;
         lastOperator = operator;
@@ -68,6 +89,7 @@ function operatorPressed(operator) {
 
 // this block determines what happens when an operator is pressed after another operator has been pressed but there is nothing to calculate yet, basically it is just updating what operator the user has chosen
     else if (lastOperator !== null && currentNumber.length === 0) {
+        previousResult = null;
         runningCalculation.pop();
         runningCalculation.push(operator);
         lastOperator = operator;
@@ -83,7 +105,6 @@ function operatorPressed(operator) {
         document.getElementById("runningCalculation").innerHTML = runningCalculation.join('');
         document.getElementById("resultDisplay").innerHTML = answer;
         lastOperator = operator;
-        previousResult = answer;
         previousNumber = [];
         previousNumber.push(answer);
         currentNumber = [];
@@ -105,6 +126,7 @@ function equalKeyPressed() {
         lastOperator = null;
         previousResult = answer;
         previousNumber = [];
+        currentNumber = [];
         currentNumber.push(answer);
     }
 }
@@ -137,7 +159,7 @@ function clearAll() {
     previousNumber.length = 0;
     runningCalculation.length = 0;
     calculationStarted = false;
-    previousResult = NaN;
+    previousResult = null;
     lastOperator = null;
     document.getElementById("runningCalculation").innerHTML = runningCalculation.join('');
     document.getElementById("resultDisplay").innerHTML = "";
