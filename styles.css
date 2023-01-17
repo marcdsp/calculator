@@ -84,7 +84,7 @@ select {
   justify-content: space-around;
   flex-direction: column;
   align-items: center;
-  background-color: rgb(19, 19, 20);
+  background-color: rgb(170, 169, 177);
 }
 
 .calculatorCase {
@@ -93,32 +93,41 @@ select {
   justify-content: center;
   height: 600px;
   width: 350px;
-  border: 0.4px solid antiquewhite;
+ /* border: 0.4px solid antiquewhite;*/
 }
 
 .screen {
   height: 100%;
   flex: 1;
+  background-color: rgb(26, 26, 27);
+  border-top: 0.05px solid rgb(70, 70, 83);
 }
 
 .runningCalculation {
+  display: flex;
   height: 30%;
   margin-top: 5%;
-color: blanchedalmond;
+  color: rgb(205, 224, 255);
+  font-size: 2rem;
 }
 
 .resultDisplay {
+  display: flex;
   height: 50%;
   margin-bottom: 5%;
   color: rgb(246, 242, 235);
+  font-size: 3rem;
+  
 }
 
 .resultDisplay,
 .runningCalculation {
   margin-left: 3%;
   margin-right: 3%;
-  justify-content: space-around;
-  text-align:right;
+  align-items:center;
+  justify-content: flex-end;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .keyPanel {
@@ -127,9 +136,9 @@ color: blanchedalmond;
   flex: 2;
   width: 100%;
   height: 100%;
-  border-top: 0.2px solid antiquewhite;
+  border-top: 0.2px solid rgb(91, 91, 98);
   background-color: rgb(19, 19, 20);
- /*  box-sizing: border-box; */
+padding: 3%;
   justify-content: space-between;
 }
 
@@ -148,7 +157,39 @@ color: blanchedalmond;
   cursor: pointer;
   user-select: none;
   background-color:rgb(53, 61, 66);
-  color: antiquewhite;
+  color: rgb(205, 224, 255);
+  transition: all 0.2s ease-out;
+  font-size: 1.5rem;
+  font-weight: bolder;
+}
 
+.keys:hover {
+  background-color:rgb(69, 78, 83);
+  color: white;
+  box-shadow: 0 0 3px 1px rgb(0, 62, 62);
+}
 
+#\3D {
+  background-color: rgb(66, 150, 150);
+}
+
+#\2B, #\2D, #⁺∕₋, #x, #÷,#\25 {
+  color: aquamarine;
+}
+
+#C, #⌫ {
+color: palevioletred;
+}
+
+.logo {
+  display: flex;
+  padding-left: 7%;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  background-color: rgb(236, 236, 235);
+  filter: invert(100%);
+}
+
+.calcLogoWrapper {
+  box-shadow: 0 0 10px 3px rgb(0, 62, 62);
 }
