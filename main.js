@@ -30,88 +30,80 @@ let operators = {
 function numberPressed(val) {
   if (previousResult == null) {
     if (val == ".") {
-        decimalPoint(val)
-      }
-      else if (val == "0") {
-        zeroKey(val);
-      }
-      else if (currentNumberDisplay.includes("%")) {
+      decimalPoint(val);
+    } else if (val == "0") {
+      zeroKey(val);
+    } else if (currentNumberDisplay.includes("%")) {
       lastOperator = "x";
       previousNumber = [];
       previousNumberDisplay = [];
       previousNumber.push(...currentNumber);
       previousNumberDisplay.push(...currentNumberDisplay);
-      currentNumber.length=0;
-      currentNumberDisplay.length=0;
+      currentNumber.length = 0;
+      currentNumberDisplay.length = 0;
       currentNumber.push(val);
       currentNumberDisplay.push(val);
       RebuildRunningCalc();
-
+    } else {
+      currentNumber.push(val);
+      currentNumberDisplay.push(val);
+      previousResult = null;
+      calculationStarted = true;
+      RebuildRunningCalc();
     }
-      else {
-        currentNumber.push(val);
-        currentNumberDisplay.push(val);
-        previousResult = null;
-        calculationStarted = true;
-        RebuildRunningCalc();
-      }
-}
-   else { //if the user presses a number after a completed calculation, restart calculator and restart numbering
+  } else {
+    //if the user presses a number after a completed calculation, restart calculator and restart numbering
     clearAll();
     runningCalculation.push(val);
     calculationStarted = true;
     currentNumber.push(val);
-currentNumberDisplay.push(val);
-    RebuildRunningCalc()}
-   }
+    currentNumberDisplay.push(val);
+    RebuildRunningCalc();
+  }
+}
 
 //decimal point function block
 function decimalPoint(val) {
-    if (currentNumber.length == 0) {
-        previousResult = null;
-        val = "0.";
-        runningCalculation.push(val);
-        calculationStarted = true;
-        currentNumber.push(val);
-currentNumberDisplay.push(val);
-        RebuildRunningCalc();
-    }
-    else if (currentNumber.length == 1 && currentNumber[0] == "-") {
-      previousResult = null;
-        val = "0.";
-        runningCalculation.push(val);
-        calculationStarted = true;
-        currentNumber.push(val);
-currentNumberDisplay.push(val);
-        RebuildRunningCalc();
-      } else if (currentNumber.includes(".") || currentNumber.includes("0.")) {
-        previousResult = null;
-}
-else { 
+  if (currentNumber.length == 0) {
+    previousResult = null;
+    val = "0.";
+    runningCalculation.push(val);
+    calculationStarted = true;
+    currentNumber.push(val);
+    currentNumberDisplay.push(val);
+    RebuildRunningCalc();
+  } else if (currentNumber.length == 1 && currentNumber[0] == "-") {
+    previousResult = null;
+    val = "0.";
+    runningCalculation.push(val);
+    calculationStarted = true;
+    currentNumber.push(val);
+    currentNumberDisplay.push(val);
+    RebuildRunningCalc();
+  } else if (currentNumber.includes(".") || currentNumber.includes("0.")) {
+    previousResult = null;
+  } else {
     runningCalculation.push(val);
     previousResult = null;
     document.getElementById("resultDisplay").innerHTML = "";
     calculationStarted = true;
     currentNumber.push(val);
-currentNumberDisplay.push(val);
+    currentNumberDisplay.push(val);
     RebuildRunningCalc();
   }
 }
 
 // zero key function block
 function zeroKey(val) {
-    if (currentNumber.length == 0) {
-    }
-    else if (currentNumber.length == 1 && currentNumber[0] == "-") {
-
-    }
-else { 
+  if (currentNumber.length == 0) {
+  } else if (currentNumber.length == 1 && currentNumber[0] == "-") {
+  } else {
     runningCalculation.push(val);
     previousResult = null;
     document.getElementById("resultDisplay").innerHTML = "";
     calculationStarted = true;
     currentNumber.push(val);
-  currentNumberDisplay.push(val);
+    currentNumberDisplay.push(val);
     RebuildRunningCalc();
   }
 }
@@ -148,25 +140,25 @@ function operatorPressed(operator) {
     arg1 = previousNumber.join("");
     arg2 = currentNumber.join("");
     answer = calculate(arg1, arg2, lastOperator);
-    answer = (""+answer).split("")
+    answer = ("" + answer).split("");
     runningCalculation.length = 0;
     runningCalculation.splice(0, runningCalculation.length, ...answer);
     runningCalculation.push(operator);
     RebuildRunningCalc();
     display = answer.join("");
-    if(display.length > 13) display = display.substring(0,13);
+    if (display.length > 13) display = display.substring(0, 13);
     document.getElementById("resultDisplay").innerHTML = display;
     lastOperator = operator;
-    previousNumber.length=0;
-    previousNumberDisplay.length=0;
-    previousNumber.splice(0,previousNumber.length, ...answer);
-    previousNumberDisplay.splice(0,previousNumber.length, ...answer);
-    currentNumber.length=0;
-    currentNumberDisplay.length=0;
+    previousNumber.length = 0;
+    previousNumberDisplay.length = 0;
+    previousNumber.splice(0, previousNumber.length, ...answer);
+    previousNumberDisplay.splice(0, previousNumber.length, ...answer);
+    currentNumber.length = 0;
+    currentNumberDisplay.length = 0;
   }
 }
 
-//equal key function block 
+//equal key function block
 function equalKeyPressed() {
   if (currentNumber.length == 0) {
   } else if (previousNumber.length !== 0 && lastOperator !== null) {
@@ -175,40 +167,30 @@ function equalKeyPressed() {
     answer = calculate(arg1, arg2, lastOperator);
     answer = ("" + answer).split("");
     runningCalculation.length = 0;
-    runningCalculation.splice(0,runningCalculation.length, ...answer);
+    runningCalculation.splice(0, runningCalculation.length, ...answer);
     display = answer.join("");
-    if(display.length > 12) display = display.substring(0,12);
+    if (display.length > 12) display = display.substring(0, 12);
     document.getElementById("resultDisplay").innerHTML = "= " + display;
     lastOperator = null;
     previousResult = answer;
-    previousNumber.length=0;
-    previousNumberDisplay.length=0;
+    previousNumber.length = 0;
+    previousNumberDisplay.length = 0;
     currentNumber.length = 0;
     currentNumberDisplay.length = 0;
-    currentNumber.splice(0,answer.length, ...answer);
-    currentNumberDisplay.splice(0,answer.length, ...answer);
+    currentNumber.splice(0, answer.length, ...answer);
+    currentNumberDisplay.splice(0, answer.length, ...answer);
   }
 }
 
-//backspace function block 
+//backspace function block
 function backspacePressed() {
-  //if (previousResult != null) {
-    //previousResult = null;
-    //document.getElementById("resultDisplay").innerHTML = "";
-    ///currentNumber.pop();
-    //currentNumberDisplay.pop();
-    //RebuildRunningCalc();
-  //}
-  //else 
   if (runningCalculation.length == 0) {
-}
-  else if (lastOperator == null) {
+  } else if (lastOperator == null) {
     runningCalculation.pop();
     currentNumber.pop();
     currentNumberDisplay.pop();
     RebuildRunningCalc();
-  }
-  else if (currentNumber.length == 0 && lastOperator !== null) {
+  } else if (currentNumber.length == 0 && lastOperator !== null) {
     runningCalculation.pop();
     currentNumber.push(...runningCalculation);
     currentNumberDisplay.push(...runningCalculation);
@@ -216,14 +198,13 @@ function backspacePressed() {
     previousNumberDisplay.length = 0;
     lastOperator = null;
     RebuildRunningCalc();
-      document.getElementById("resultDisplay").innerHTML ="";
+    document.getElementById("resultDisplay").innerHTML = "";
+  } else if (currentNumber.length !== 0 && lastOperator !== null) {
+    currentNumber.pop();
+    currentNumberDisplay.pop();
+    RebuildRunningCalc();
+    document.getElementById("resultDisplay").innerHTML = "";
   }
-else if (currentNumber.length !== 0 && lastOperator !== null) {
-currentNumber.pop();
-currentNumberDisplay.pop();
-RebuildRunningCalc();
-document.getElementById("resultDisplay").innerHTML ="";
-}
 }
 
 //plus-minus keypress function block
@@ -231,44 +212,47 @@ function plusMinusPressed() {
   if (currentNumber[0] == "-") {
     currentNumber.shift();
     currentNumberDisplay.shift();
-RebuildRunningCalc();
-document.getElementById("resultDisplay").innerHTML ="";
+    RebuildRunningCalc();
+    document.getElementById("resultDisplay").innerHTML = "";
+  } else {
+    currentNumber.unshift("-");
+    currentNumberDisplay.unshift("-");
+    RebuildRunningCalc();
+    document.getElementById("resultDisplay").innerHTML = "";
   }
-  else {currentNumber.unshift("-")
-  currentNumberDisplay.unshift("-");
-RebuildRunningCalc();
-document.getElementById("resultDisplay").innerHTML ="";
-}
 }
 
 //percentage key function block
 function percentagePressed() {
-  if (currentNumberDisplay[currentNumberDisplay.length-1] == "%") {
+  if (currentNumberDisplay[currentNumberDisplay.length - 1] == "%") {
     arg1 = currentNumber.join("");
-    currentNumber = calculate(arg1, "100","x");
-    currentNumber = (""+currentNumber).split("");
+    currentNumber = calculate(arg1, "100", "x");
+    currentNumber = ("" + currentNumber).split("");
     currentNumberDisplay.pop();
-RebuildRunningCalc();
-document.getElementById("resultDisplay").innerHTML ="";
-  }
-  else {
+    RebuildRunningCalc();
+    document.getElementById("resultDisplay").innerHTML = "";
+  } else {
     arg1 = currentNumber.join("");
-    currentNumber = calculate(arg1,"100","÷");
-    currentNumber = (""+currentNumber).split("");
-  currentNumberDisplay.push("%");
-RebuildRunningCalc();
-document.getElementById("resultDisplay").innerHTML ="";
-}
+    currentNumber = calculate(arg1, "100", "÷");
+    currentNumber = ("" + currentNumber).split("");
+    currentNumberDisplay.push("%");
+    RebuildRunningCalc();
+    document.getElementById("resultDisplay").innerHTML = "";
+  }
 }
 
 //Build the running calculation display and then print
-function RebuildRunningCalc(){
-runningCalculation.length=0;
-runningCalculation = runningCalculation.concat(previousNumberDisplay,lastOperator,currentNumberDisplay);
-display = runningCalculation.join("");
-if(display.length > 18) display = display.substring(0,18);
-document.getElementById("runningCalculation").innerHTML = display;
-document.getElementById("resultDisplay").innerHTML =""
+function RebuildRunningCalc() {
+  runningCalculation.length = 0;
+  runningCalculation = runningCalculation.concat(
+    previousNumberDisplay,
+    lastOperator,
+    currentNumberDisplay
+  );
+  display = runningCalculation.join("");
+  if (display.length > 18) display = display.substring(0, 18);
+  document.getElementById("runningCalculation").innerHTML = display;
+  document.getElementById("resultDisplay").innerHTML = "";
 }
 
 //key identifier... switches function based on key pressed
@@ -303,14 +287,11 @@ function keyType(e) {
       clearAll();
     } else if (clickedItem == "=") {
       equalKeyPressed();
-    }
-    else if (clickedItem == "⌫") {
+    } else if (clickedItem == "⌫") {
       backspacePressed();
-    }
-    else if (clickedItem == "⁺∕₋") {
+    } else if (clickedItem == "⁺∕₋") {
       plusMinusPressed();
-    }
-    else if (clickedItem == "%") {
+    } else if (clickedItem == "%") {
       percentagePressed();
     }
     e.stopPropagation();
